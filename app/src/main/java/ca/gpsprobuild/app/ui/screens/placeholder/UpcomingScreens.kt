@@ -2,8 +2,6 @@ package ca.gpsprobuild.app.ui.screens.placeholder
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Construction
-import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import ca.gpsprobuild.app.ui.components.EmptyState
@@ -13,22 +11,6 @@ import ca.gpsprobuild.app.ui.components.EmptyState
  * will hold, rather than saying "coming soon" — the person installing this build
  * should be able to tell what is finished and what is not.
  */
-
-@Composable
-fun JobsPlaceholder() = EmptyState(
-    icon = Icons.Filled.Construction,
-    title = "Jobs",
-    message = "Job list, board view and the nine-tab job detail arrive in step 3. " +
-        "The database behind them is already in place."
-)
-
-@Composable
-fun CustomersPlaceholder() = EmptyState(
-    icon = Icons.Filled.People,
-    title = "Customers",
-    message = "Customer list, detail and the call / text / email / directions row " +
-        "arrive in step 2."
-)
 
 @Composable
 fun SchedulePlaceholder() = EmptyState(
