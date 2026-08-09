@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -276,7 +278,7 @@ fun PhotoTab(viewModel: PhotoTabViewModel = hiltViewModel()) {
                 Box(
                     Modifier
                         .aspectRatio(1f)
-                        .clickableThumb { viewerIndex = index }
+                        .clickable { viewerIndex = index }
                 ) {
                     AsyncImage(
                         model = viewModel.thumbFor(photo),
@@ -310,8 +312,6 @@ private fun gridHeightFor(count: Int): androidx.compose.ui.unit.Dp {
     return (rows * 124).dp
 }
 
-private fun Modifier.clickableThumb(onClick: () -> Unit): Modifier =
-    this.then(androidx.compose.foundation.clickable(onClick = onClick))
 
 @Composable
 private fun PhotoViewer(
@@ -411,5 +411,3 @@ private fun PhotoViewer(
     }
 }
 
-private fun Modifier.background(color: Color): Modifier =
-    this.then(androidx.compose.foundation.background(color))
