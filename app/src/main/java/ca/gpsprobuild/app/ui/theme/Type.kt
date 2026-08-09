@@ -1,6 +1,7 @@
 package ca.gpsprobuild.app.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -33,6 +34,7 @@ val Barlow = FontFamily(
  * Inter ships as a single variable file. minSdk 26 supports variation settings,
  * so one 880 KB asset covers every weight instead of six static files.
  */
+@OptIn(ExperimentalTextApi::class)
 val Inter = FontFamily(
     Font(
         R.font.inter_variable,

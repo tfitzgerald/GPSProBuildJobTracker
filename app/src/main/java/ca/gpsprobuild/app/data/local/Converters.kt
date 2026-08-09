@@ -24,8 +24,8 @@ class Converters {
     fun longToLocalDate(value: Long?): LocalDate? = value?.let(LocalDate::ofEpochDay)
 
     @TypeConverter
-    fun localTimeToInt(value: LocalTime?): Int? = value?.toSecondOfDay()
+    fun localTimeToLong(value: LocalTime?): Long? = value?.toSecondOfDay()?.toLong()
 
     @TypeConverter
-    fun intToLocalTime(value: Int?): LocalTime? = value?.let(LocalTime::ofSecondOfDay)
+    fun longToLocalTime(value: Long?): LocalTime? = value?.let(LocalTime::ofSecondOfDay)
 }
