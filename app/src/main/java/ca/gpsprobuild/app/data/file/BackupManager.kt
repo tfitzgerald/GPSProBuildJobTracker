@@ -179,6 +179,7 @@ class BackupManager @Inject constructor(
             replaceTree(File(staging, "docs"), File(context.filesDir, "docs"))
 
             staging.deleteRecursively()
+            Unit
         }
     }
 
