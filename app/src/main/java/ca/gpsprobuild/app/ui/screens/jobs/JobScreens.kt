@@ -69,6 +69,7 @@ import ca.gpsprobuild.app.ui.components.EmptyState
 import ca.gpsprobuild.app.ui.screens.materials.MaterialTab
 import ca.gpsprobuild.app.ui.screens.money.MoneyTab
 import ca.gpsprobuild.app.ui.screens.photos.PhotoTab
+import ca.gpsprobuild.app.ui.screens.reports.ReportTab
 import ca.gpsprobuild.app.ui.screens.staff.JobCrewTab
 import ca.gpsprobuild.app.ui.screens.tasks.TaskTab
 import ca.gpsprobuild.app.ui.components.MoneyKind
@@ -212,7 +213,8 @@ private enum class JobTab(val label: String) {
     MATERIALS("Materials"),
     PHOTOS("Photos"),
     CREW("Crew"),
-    MONEY("Money")
+    MONEY("Money"),
+    DOCS("Docs")
 }
 
 // ---------------------------------------------------------------------------
@@ -304,6 +306,12 @@ fun JobDetailScreen(
                     JobTab.MONEY -> {
                         Spacer(Modifier.height(Dimens.cardGap))
                         MoneyTab()
+                        Spacer(Modifier.height(64.dp))
+                        return@Column
+                    }
+                    JobTab.DOCS -> {
+                        Spacer(Modifier.height(Dimens.cardGap))
+                        ReportTab()
                         Spacer(Modifier.height(64.dp))
                         return@Column
                     }

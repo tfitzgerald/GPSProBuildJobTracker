@@ -31,7 +31,8 @@ import ca.gpsprobuild.app.ui.screens.materials.BuyListScreen
 import ca.gpsprobuild.app.ui.screens.more.MoreScreen
 import ca.gpsprobuild.app.ui.screens.staff.CrewEditScreen
 import ca.gpsprobuild.app.ui.screens.staff.CrewListScreen
-import ca.gpsprobuild.app.ui.screens.placeholder.SchedulePlaceholder
+import ca.gpsprobuild.app.ui.screens.schedule.ScheduleScreen
+import ca.gpsprobuild.app.ui.screens.settings.SettingsScreen
 import ca.gpsprobuild.app.ui.screens.setup.SetupScreen
 import ca.gpsprobuild.app.ui.theme.GpsProBuildTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -93,6 +94,7 @@ private object Routes {
     const val CREW_NEW = "crew/new"
     const val CREW_EDIT = "crew/{staffId}/edit"
     const val BUY_LIST = "buylist"
+    const val SETTINGS = "settings"
 
     fun crewEdit(id: Long) = "crew/$id/edit"
 }
@@ -202,11 +204,18 @@ private fun MainShell(role: DeviceRole) {
                 BuyListScreen(onBack = { navController.popBackStack() })
             }
 
-            composable(Destination.Schedule.route) { SchedulePlaceholder() }
+            composable(Routes.SETTINGS) {
+                SettingsScreen(onBack = { navController.popBackStack() })
+            }
+
+            composable(Destination.Schedule.route) {
+                ScheduleScreen(onOpenJob = { navController.navigate(Routes.jobDetail(it)) })
+            }
             composable(Destination.More.route) {
                 MoreScreen(
                     onOpenCrew = { navController.navigate(Routes.CREW) },
-                    onOpenBuyList = { navController.navigate(Routes.BUY_LIST) }
+                    onOpenBuyList = { navController.navigate(Routes.BUY_LIST) },
+                    onOpenSettings = { navController.navigate(Routes.SETTINGS) }
                 )
             }
         }

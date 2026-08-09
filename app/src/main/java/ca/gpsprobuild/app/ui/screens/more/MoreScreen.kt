@@ -35,7 +35,8 @@ import ca.gpsprobuild.app.ui.theme.Dimens
 @Composable
 fun MoreScreen(
     onOpenCrew: () -> Unit,
-    onOpenBuyList: () -> Unit
+    onOpenBuyList: () -> Unit,
+    onOpenSettings: () -> Unit
 ) {
     Column(
         Modifier
@@ -53,10 +54,16 @@ fun MoreScreen(
             onOpenBuyList
         )
 
+        HubRow(
+            Icons.Filled.Settings,
+            "Settings and backup",
+            "Company profile, job numbering, showing money, ZIP backup",
+            onOpenSettings
+        )
+
         Spacer(Modifier.height(Dimens.sectionGap))
         SectionHeader("Not built yet")
         HubRow(Icons.Filled.Sync, "Field sync", "Send work out, take reports back in", null)
-        HubRow(Icons.Filled.Settings, "Settings and backup", "Company profile, PDF reports, ZIP backup", null)
 
         Spacer(Modifier.height(Dimens.sectionGap))
         Text(

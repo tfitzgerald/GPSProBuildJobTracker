@@ -3,6 +3,7 @@ package ca.gpsprobuild.app.di
 import android.content.Context
 import androidx.room.Room
 import ca.gpsprobuild.app.data.local.AppDatabase
+import ca.gpsprobuild.app.data.local.dao.AppointmentDao
 import ca.gpsprobuild.app.data.local.dao.ChangeOrderDao
 import ca.gpsprobuild.app.data.local.dao.ContactDao
 import ca.gpsprobuild.app.data.local.dao.DocumentDao
@@ -60,4 +61,5 @@ object AppModule {
     @Provides fun provideExpenseDao(db: AppDatabase): ExpenseDao = db.expenseDao()
     @Provides fun provideChangeOrderDao(db: AppDatabase): ChangeOrderDao = db.changeOrderDao()
     @Provides fun provideDocumentDao(db: AppDatabase): DocumentDao = db.documentDao()
+    @Provides fun provideAppointmentDao(db: AppDatabase): AppointmentDao = db.appointmentDao()
 }
