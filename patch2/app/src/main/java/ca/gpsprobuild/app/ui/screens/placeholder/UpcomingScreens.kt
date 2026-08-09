@@ -2,7 +2,6 @@ package ca.gpsprobuild.app.ui.screens.placeholder
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import ca.gpsprobuild.app.ui.components.EmptyState
 
@@ -20,9 +19,3 @@ fun SchedulePlaceholder() = EmptyState(
         "appointments and job dates to show."
 )
 
-@Composable
-fun MorePlaceholder() = EmptyState(
-    icon = Icons.Filled.Settings,
-    title = "More",
-    message = "Crew, buy list, suppliers, reports, sync and settings live here."
-)

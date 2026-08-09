@@ -5,7 +5,10 @@ import androidx.room.Room
 import ca.gpsprobuild.app.data.local.AppDatabase
 import ca.gpsprobuild.app.data.local.dao.ContactDao
 import ca.gpsprobuild.app.data.local.dao.CustomerDao
+import ca.gpsprobuild.app.data.local.dao.JobAssignmentDao
 import ca.gpsprobuild.app.data.local.dao.JobEventDao
+import ca.gpsprobuild.app.data.local.dao.SupplierDao
+import ca.gpsprobuild.app.data.local.dao.TaskAssignmentDao
 import ca.gpsprobuild.app.data.local.dao.JobDao
 import ca.gpsprobuild.app.data.local.dao.MaterialDao
 import ca.gpsprobuild.app.data.local.dao.PhotoDao
@@ -46,4 +49,7 @@ object AppModule {
     @Provides fun provideSyncDao(db: AppDatabase): SyncDao = db.syncDao()
     @Provides fun provideContactDao(db: AppDatabase): ContactDao = db.contactDao()
     @Provides fun provideJobEventDao(db: AppDatabase): JobEventDao = db.jobEventDao()
+    @Provides fun provideSupplierDao(db: AppDatabase): SupplierDao = db.supplierDao()
+    @Provides fun provideJobAssignmentDao(db: AppDatabase): JobAssignmentDao = db.jobAssignmentDao()
+    @Provides fun provideTaskAssignmentDao(db: AppDatabase): TaskAssignmentDao = db.taskAssignmentDao()
 }

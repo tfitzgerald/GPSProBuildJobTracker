@@ -27,7 +27,10 @@ import ca.gpsprobuild.app.ui.screens.dashboard.DashboardScreen
 import ca.gpsprobuild.app.ui.screens.jobs.JobDetailScreen
 import ca.gpsprobuild.app.ui.screens.jobs.JobEditScreen
 import ca.gpsprobuild.app.ui.screens.jobs.JobListScreen
-import ca.gpsprobuild.app.ui.screens.placeholder.MorePlaceholder
+import ca.gpsprobuild.app.ui.screens.materials.BuyListScreen
+import ca.gpsprobuild.app.ui.screens.more.MoreScreen
+import ca.gpsprobuild.app.ui.screens.staff.CrewEditScreen
+import ca.gpsprobuild.app.ui.screens.staff.CrewListScreen
 import ca.gpsprobuild.app.ui.screens.placeholder.SchedulePlaceholder
 import ca.gpsprobuild.app.ui.screens.setup.SetupScreen
 import ca.gpsprobuild.app.ui.theme.GpsProBuildTheme
@@ -85,6 +88,13 @@ private object Routes {
     fun jobDetail(id: Long) = "job/$id"
     fun jobEdit(id: Long) = "job/$id/edit"
     fun jobNewForCustomer(customerId: Long) = "job/new/$customerId"
+
+    const val CREW = "crew"
+    const val CREW_NEW = "crew/new"
+    const val CREW_EDIT = "crew/{staffId}/edit"
+    const val BUY_LIST = "buylist"
+
+    fun crewEdit(id: Long) = "crew/$id/edit"
 }
 
 @Composable
@@ -171,8 +181,34 @@ private fun MainShell(role: DeviceRole) {
                 )
             }
 
+            // --- Crew and buy list -----------------------------------------
+            composable(Routes.CREW) {
+                CrewListScreen(
+                    onBack = { navController.popBackStack() },
+                    onAdd = { navController.navigate(Routes.CREW_NEW) },
+                    onEdit = { navController.navigate(Routes.crewEdit(it)) }
+                )
+            }
+            composable(Routes.CREW_NEW) {
+                CrewEditScreen(onBack = { navController.popBackStack() })
+            }
+            composable(
+                route = Routes.CREW_EDIT,
+                arguments = listOf(navArgument("staffId") { type = NavType.StringType })
+            ) {
+                CrewEditScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Routes.BUY_LIST) {
+                BuyListScreen(onBack = { navController.popBackStack() })
+            }
+
             composable(Destination.Schedule.route) { SchedulePlaceholder() }
-            composable(Destination.More.route) { MorePlaceholder() }
+            composable(Destination.More.route) {
+                MoreScreen(
+                    onOpenCrew = { navController.navigate(Routes.CREW) },
+                    onOpenBuyList = { navController.navigate(Routes.BUY_LIST) }
+                )
+            }
         }
     }
 }
