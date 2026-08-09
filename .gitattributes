@@ -1,9 +1,6 @@
-Set-Content -Path .gitattributes -Encoding ascii -Value @(
-  '* text=auto eol=lf'
-  '*.bat text eol=crlf'
-  '*.jar binary'
-  '*.ttf binary'
-  '*.keystore binary'
-  '*.jks binary'
-)
-Get-Content .gitattributes
+* text=auto eol=lf
+*.bat text eol=crlf
+*.jar binary
+*.ttf binary
+*.keystore binary
+*.jks binary
