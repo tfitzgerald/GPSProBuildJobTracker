@@ -10,15 +10,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import ca.gpsprobuild.app.data.prefs.SettingsRepository
+import ca.gpsprobuild.app.domain.model.DeviceRole
 import ca.gpsprobuild.app.ui.navigation.Destination
 import ca.gpsprobuild.app.ui.navigation.GpsBottomBar
+import ca.gpsprobuild.app.ui.screens.customers.CustomerDetailScreen
+import ca.gpsprobuild.app.ui.screens.customers.CustomerEditScreen
+import ca.gpsprobuild.app.ui.screens.customers.CustomerListScreen
 import ca.gpsprobuild.app.ui.screens.dashboard.DashboardScreen
-import ca.gpsprobuild.app.ui.screens.placeholder.CustomersPlaceholder
-import ca.gpsprobuild.app.ui.screens.placeholder.JobsPlaceholder
+import ca.gpsprobuild.app.ui.screens.jobs.JobDetailScreen
+import ca.gpsprobuild.app.ui.screens.jobs.JobEditScreen
+import ca.gpsprobuild.app.ui.screens.jobs.JobListScreen
 import ca.gpsprobuild.app.ui.screens.placeholder.MorePlaceholder
 import ca.gpsprobuild.app.ui.screens.placeholder.SchedulePlaceholder
 import ca.gpsprobuild.app.ui.screens.setup.SetupScreen
@@ -39,8 +47,8 @@ class MainActivity : ComponentActivity() {
             val settings by settingsRepository.settings
                 .collectAsStateWithLifecycle(initialValue = null)
 
-            // Hold the splash window until settings resolve, so the app never
-            // flashes the setup screen at someone who already finished it.
+            // Wait for settings before drawing anything, so the app never flashes
+            // the setup screen at someone who already finished it.
             val resolved = settings ?: return@setContent
 
             GpsProBuildTheme(
@@ -48,7 +56,7 @@ class MainActivity : ComponentActivity() {
                 privacyMode = resolved.effectivePrivacyMode
             ) {
                 if (!resolved.setupComplete) {
-                    SetupScreen(onSetupComplete = { /* settings flow re-emits and swaps the tree */ })
+                    SetupScreen(onSetupComplete = { /* settings re-emits and swaps the tree */ })
                 } else {
                     MainShell(role = resolved.deviceRole)
                 }
@@ -57,8 +65,30 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * Routes are plain strings with path arguments. Type-safe serializable routes are
+ * tidier but add a moving part, and navigation here is shallow enough that the
+ * trade is not worth it.
+ */
+private object Routes {
+    const val CUSTOMER_DETAIL = "customer/{customerId}"
+    const val CUSTOMER_EDIT = "customer/{customerId}/edit"
+    const val CUSTOMER_NEW = "customer/new"
+
+    const val JOB_DETAIL = "job/{jobId}"
+    const val JOB_EDIT = "job/{jobId}/edit"
+    const val JOB_NEW = "job/new"
+    const val JOB_NEW_FOR_CUSTOMER = "job/new/{customerId}"
+
+    fun customerDetail(id: Long) = "customer/$id"
+    fun customerEdit(id: Long) = "customer/$id/edit"
+    fun jobDetail(id: Long) = "job/$id"
+    fun jobEdit(id: Long) = "job/$id/edit"
+    fun jobNewForCustomer(customerId: Long) = "job/new/$customerId"
+}
+
 @Composable
-private fun MainShell(role: ca.gpsprobuild.app.domain.model.DeviceRole) {
+private fun MainShell(role: DeviceRole) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -70,10 +100,89 @@ private fun MainShell(role: ca.gpsprobuild.app.domain.model.DeviceRole) {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Destination.Dashboard.route) { DashboardScreen() }
-            composable(Destination.Jobs.route) { JobsPlaceholder() }
-            composable(Destination.Customers.route) { CustomersPlaceholder() }
+
+            // --- Customers -------------------------------------------------
+            composable(Destination.Customers.route) {
+                CustomerListScreen(
+                    onOpenCustomer = { navController.navigate(Routes.customerDetail(it)) },
+                    onAddCustomer = { navController.navigate(Routes.CUSTOMER_NEW) }
+                )
+            }
+            composable(
+                route = Routes.CUSTOMER_DETAIL,
+                arguments = listOf(navArgument("customerId") { type = NavType.StringType })
+            ) {
+                CustomerDetailScreen(
+                    onBack = { navController.popBackStack() },
+                    onEdit = { navController.navigate(Routes.customerEdit(it)) },
+                    onOpenJob = { navController.navigate(Routes.jobDetail(it)) },
+                    onAddJob = { navController.navigate(Routes.jobNewForCustomer(it)) }
+                )
+            }
+            composable(Routes.CUSTOMER_NEW) {
+                CustomerEditScreen(onBack = { navController.popBackStack() })
+            }
+            composable(
+                route = Routes.CUSTOMER_EDIT,
+                arguments = listOf(navArgument("customerId") { type = NavType.StringType })
+            ) {
+                CustomerEditScreen(onBack = { navController.popBackStack() })
+            }
+
+            // --- Jobs ------------------------------------------------------
+            composable(Destination.Jobs.route) {
+                JobListScreen(
+                    onOpenJob = { navController.navigate(Routes.jobDetail(it)) },
+                    onAddJob = { navController.navigate(Routes.JOB_NEW) }
+                )
+            }
+            composable(
+                route = Routes.JOB_DETAIL,
+                arguments = listOf(navArgument("jobId") { type = NavType.StringType })
+            ) {
+                JobDetailScreen(
+                    onBack = { navController.popBackStack() },
+                    onEdit = { navController.navigate(Routes.jobEdit(it)) },
+                    onOpenCustomer = { navController.navigate(Routes.customerDetail(it)) }
+                )
+            }
+            composable(Routes.JOB_NEW) {
+                JobEditScreen(
+                    onBack = { navController.popBackStack() },
+                    onSaved = { id -> navController.replaceWith(Routes.jobDetail(id)) }
+                )
+            }
+            composable(
+                route = Routes.JOB_NEW_FOR_CUSTOMER,
+                arguments = listOf(navArgument("customerId") { type = NavType.StringType })
+            ) {
+                JobEditScreen(
+                    onBack = { navController.popBackStack() },
+                    onSaved = { id -> navController.replaceWith(Routes.jobDetail(id)) }
+                )
+            }
+            composable(
+                route = Routes.JOB_EDIT,
+                arguments = listOf(navArgument("jobId") { type = NavType.StringType })
+            ) {
+                JobEditScreen(
+                    onBack = { navController.popBackStack() },
+                    onSaved = { navController.popBackStack() }
+                )
+            }
+
             composable(Destination.Schedule.route) { SchedulePlaceholder() }
             composable(Destination.More.route) { MorePlaceholder() }
         }
     }
+}
+
+/**
+ * After creating a job, land on the new job rather than back on the empty form —
+ * pressing back from there should return to the list, not to a form for a job
+ * that already exists.
+ */
+private fun NavHostController.replaceWith(route: String) {
+    popBackStack()
+    navigate(route)
 }

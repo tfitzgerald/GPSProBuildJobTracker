@@ -3,7 +3,9 @@ package ca.gpsprobuild.app.di
 import android.content.Context
 import androidx.room.Room
 import ca.gpsprobuild.app.data.local.AppDatabase
+import ca.gpsprobuild.app.data.local.dao.ContactDao
 import ca.gpsprobuild.app.data.local.dao.CustomerDao
+import ca.gpsprobuild.app.data.local.dao.JobEventDao
 import ca.gpsprobuild.app.data.local.dao.JobDao
 import ca.gpsprobuild.app.data.local.dao.MaterialDao
 import ca.gpsprobuild.app.data.local.dao.PhotoDao
@@ -42,4 +44,6 @@ object AppModule {
     @Provides fun provideMaterialDao(db: AppDatabase): MaterialDao = db.materialDao()
     @Provides fun providePhotoDao(db: AppDatabase): PhotoDao = db.photoDao()
     @Provides fun provideSyncDao(db: AppDatabase): SyncDao = db.syncDao()
+    @Provides fun provideContactDao(db: AppDatabase): ContactDao = db.contactDao()
+    @Provides fun provideJobEventDao(db: AppDatabase): JobEventDao = db.jobEventDao()
 }
