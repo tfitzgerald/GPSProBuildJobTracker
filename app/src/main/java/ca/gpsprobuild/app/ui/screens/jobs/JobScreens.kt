@@ -41,7 +41,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -67,6 +67,8 @@ import ca.gpsprobuild.app.domain.model.Labelled
 import ca.gpsprobuild.app.domain.model.Priority
 import ca.gpsprobuild.app.ui.components.EmptyState
 import ca.gpsprobuild.app.ui.screens.materials.MaterialTab
+import ca.gpsprobuild.app.ui.screens.money.MoneyTab
+import ca.gpsprobuild.app.ui.screens.photos.PhotoTab
 import ca.gpsprobuild.app.ui.screens.staff.JobCrewTab
 import ca.gpsprobuild.app.ui.screens.tasks.TaskTab
 import ca.gpsprobuild.app.ui.components.MoneyKind
@@ -208,7 +210,9 @@ private enum class JobTab(val label: String) {
     OVERVIEW("Overview"),
     TASKS("Tasks"),
     MATERIALS("Materials"),
-    CREW("Crew")
+    PHOTOS("Photos"),
+    CREW("Crew"),
+    MONEY("Money")
 }
 
 // ---------------------------------------------------------------------------
@@ -256,7 +260,7 @@ fun JobDetailScreen(
         }
 
         Column(Modifier.fillMaxSize().padding(padding)) {
-            TabRow(selectedTabIndex = selectedTab) {
+            ScrollableTabRow(selectedTabIndex = selectedTab, edgePadding = 0.dp) {
                 JobTab.entries.forEachIndexed { index, tab ->
                     Tab(
                         selected = selectedTab == index,
@@ -285,9 +289,21 @@ fun JobDetailScreen(
                         Spacer(Modifier.height(64.dp))
                         return@Column
                     }
+                    JobTab.PHOTOS -> {
+                        Spacer(Modifier.height(Dimens.cardGap))
+                        PhotoTab()
+                        Spacer(Modifier.height(64.dp))
+                        return@Column
+                    }
                     JobTab.CREW -> {
                         Spacer(Modifier.height(Dimens.cardGap))
                         JobCrewTab()
+                        Spacer(Modifier.height(64.dp))
+                        return@Column
+                    }
+                    JobTab.MONEY -> {
+                        Spacer(Modifier.height(Dimens.cardGap))
+                        MoneyTab()
                         Spacer(Modifier.height(64.dp))
                         return@Column
                     }
