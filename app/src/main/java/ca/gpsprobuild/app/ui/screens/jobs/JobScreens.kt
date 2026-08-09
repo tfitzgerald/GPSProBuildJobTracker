@@ -40,12 +40,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -63,6 +66,9 @@ import ca.gpsprobuild.app.domain.model.JobType
 import ca.gpsprobuild.app.domain.model.Labelled
 import ca.gpsprobuild.app.domain.model.Priority
 import ca.gpsprobuild.app.ui.components.EmptyState
+import ca.gpsprobuild.app.ui.screens.materials.MaterialTab
+import ca.gpsprobuild.app.ui.screens.staff.JobCrewTab
+import ca.gpsprobuild.app.ui.screens.tasks.TaskTab
 import ca.gpsprobuild.app.ui.components.MoneyKind
 import ca.gpsprobuild.app.ui.components.MoneyText
 import ca.gpsprobuild.app.ui.components.SectionHeader
@@ -198,6 +204,13 @@ fun JobListScreen(
     }
 }
 
+private enum class JobTab(val label: String) {
+    OVERVIEW("Overview"),
+    TASKS("Tasks"),
+    MATERIALS("Materials"),
+    CREW("Crew")
+}
+
 // ---------------------------------------------------------------------------
 // Detail
 // ---------------------------------------------------------------------------
@@ -213,6 +226,7 @@ fun JobDetailScreen(
     val job = state.job
     val statusColors = LocalStatusColors.current
     var noteText by remember { mutableStateOf("") }
+    var selectedTab by remember { mutableIntStateOf(0) }
 
     Scaffold(
         topBar = {
@@ -241,13 +255,45 @@ fun JobDetailScreen(
             return@Scaffold
         }
 
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = Dimens.screenPadding)
-        ) {
+        Column(Modifier.fillMaxSize().padding(padding)) {
+            TabRow(selectedTabIndex = selectedTab) {
+                JobTab.entries.forEachIndexed { index, tab ->
+                    Tab(
+                        selected = selectedTab == index,
+                        onClick = { selectedTab = index },
+                        text = { Text(tab.label) }
+                    )
+                }
+            }
+
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = Dimens.screenPadding)
+            ) {
+                when (JobTab.entries[selectedTab]) {
+                    JobTab.TASKS -> {
+                        Spacer(Modifier.height(Dimens.cardGap))
+                        TaskTab()
+                        Spacer(Modifier.height(64.dp))
+                        return@Column
+                    }
+                    JobTab.MATERIALS -> {
+                        Spacer(Modifier.height(Dimens.cardGap))
+                        MaterialTab()
+                        Spacer(Modifier.height(64.dp))
+                        return@Column
+                    }
+                    JobTab.CREW -> {
+                        Spacer(Modifier.height(Dimens.cardGap))
+                        JobCrewTab()
+                        Spacer(Modifier.height(64.dp))
+                        return@Column
+                    }
+                    JobTab.OVERVIEW -> Unit
+                }
+
             Spacer(Modifier.height(8.dp))
             Text(job.title, style = MaterialTheme.typography.headlineSmall)
             state.customer?.let { customer ->
@@ -382,6 +428,7 @@ fun JobDetailScreen(
             }
 
             Spacer(Modifier.height(64.dp))
+            }
         }
     }
 }
