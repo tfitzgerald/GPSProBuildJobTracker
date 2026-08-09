@@ -1,0 +1,2 @@
+Room exports schema JSON here at build time. These files are committed so that
+migrations can be tested against real historical versions rather than guessed at.

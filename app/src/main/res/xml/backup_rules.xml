@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Job data is deliberately excluded from cloud auto-backup. Customer contact
+         details live in this database, and the supported recovery path is the
+         in-app ZIP backup that the owner controls and stores where they choose. -->
+    <exclude domain="database" path="." />
+    <exclude domain="file" path="photos/" />
+    <exclude domain="file" path="docs/" />
+    <exclude domain="sharedpref" path="." />
+</full-backup-content>

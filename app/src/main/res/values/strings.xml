@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">GPS ProBuild</string>
+    <string name="brand_prefix">GPS</string>
+    <string name="brand_suffix">ProBuild</string>
+    <string name="tagline">Renovation. Managed.</string>
+    <string name="legal_footer">GPS Probuild Inc. — Pickering, Ontario</string>
+    <string name="import_packet">Import GPS ProBuild packet</string>
+</resources>

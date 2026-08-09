@@ -1,0 +1,10 @@
+<resources>
+    <!-- Pre-Compose window theme. Kept minimal: it exists so the launch window
+         matches the app background instead of flashing white. -->
+    <style name="Theme.GpsProBuild.Starting" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/surface_light</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>
