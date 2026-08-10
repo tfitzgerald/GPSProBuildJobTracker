@@ -4,11 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -35,6 +38,7 @@ import ca.gpsprobuild.app.ui.screens.schedule.ScheduleScreen
 import ca.gpsprobuild.app.ui.screens.settings.SettingsScreen
 import ca.gpsprobuild.app.ui.screens.setup.SetupScreen
 import ca.gpsprobuild.app.ui.theme.GpsProBuildTheme
+import ca.gpsprobuild.app.ui.theme.blueprintBackground
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -103,9 +107,11 @@ private object Routes {
 private fun MainShell(role: DeviceRole) {
     val navController = rememberNavController()
 
-    Scaffold(
-        bottomBar = { GpsBottomBar(navController, role) }
-    ) { innerPadding ->
+    Box(Modifier.fillMaxSize().blueprintBackground()) {
+        Scaffold(
+            containerColor = Color.Transparent,
+            bottomBar = { GpsBottomBar(navController, role) }
+        ) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = Destination.Dashboard.route,
@@ -217,6 +223,7 @@ private fun MainShell(role: DeviceRole) {
                     onOpenBuyList = { navController.navigate(Routes.BUY_LIST) },
                     onOpenSettings = { navController.navigate(Routes.SETTINGS) }
                 )
+            }
             }
         }
     }
